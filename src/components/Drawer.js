@@ -1,5 +1,5 @@
-function Drawer({ onClose, items = [] }) {
-  console.log(items)
+function Drawer({ onClose, deleteFromCart, items = [] }) {
+  console.log(deleteFromCart)
   return (
     <div className="overlay">
       <div className="drawer">
@@ -9,13 +9,13 @@ function Drawer({ onClose, items = [] }) {
         </h2>
         <div className="drawer__items">
           {items.map(obj => (
-            <div className="cart-item">
+            <div key={obj.id} className="cart-item">
               <div className="cart-item__img" style={{ backgroundImage: `url(${obj.imageURL})`}}></div>
               <div className="cart-item__info">
                 <p className="cart-item__title">{obj.title}</p>
                 <b className="cart-item__price">{obj.price} руб.</b>
               </div>
-              <img className="btn-cancel" src="./img/cancel-cart.svg" alt="Cancel" />
+              <img onClick={() => deleteFromCart(obj)} className="btn-cancel" src="./img/cancel-cart.svg" alt="Cancel" />
             </div>)
           )}
         </div>

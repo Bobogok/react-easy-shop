@@ -20,25 +20,23 @@ function App() {
   }, []);
 
   const onAddToCart = (obj) => {
-    // if (JSON.stringify(obj) === JSON.stringify())
-    console.log(cartItems);
+    const some = cartItems.some(elem => elem.id === obj.id);
 
-    cartItems.forEach(currObj => {
-      if (JSON.stringify(currObj) === JSON.stringify(obj)) {
-        console.log('Объект повторяется');
-      }
-    })
-    setCartItems(prev => {
-      return [...prev, obj]
-    })
+    if (some) {
+      console.log('Сникерсы уже в корзине');
+    } else {
+      setCartItems(prev => [...prev, obj])
+    }
   }
 
-  console.log(cartItems);
+  const deleteFromCart = (obj) => {
+    setCartItems(prev => prev.filter(item => item.id !== obj.id));
+  }
 
   return (
     <div className="wrapper">
 
-      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} />}
+      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} deleteFromCart={deleteFromCart} />}
 
       <Header onClickCart={() => setCartOpened(true)} />
 
@@ -52,7 +50,9 @@ function App() {
         </div>
         <div className="main__inner-elems">
           {items.map(item => (
-            <Card 
+            <Card
+              key={item.id}
+              id={item.id}
               title={item.title} 
               price={item.price} 
               imageURL={item.imageURL} 

@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Card.module.scss';
 
-console.log(styles);
 
-function Card({ imageURL, title, price, onPlus, onFavorite }) {
+function Card({ id, imageURL, title, price, onPlus, onFavorite }) {
   const [isAdded, setIsAdded] = useState(false);
 
   const onClickPlus = () => {
-    onPlus({ imageURL, title, price });
+    onPlus({ id, imageURL, title, price });
     setIsAdded(!isAdded);
   }
 
   useEffect(() => {
-    console.log('Пременная изменилась');
+    // console.log('Пременная изменилась');
   }, [isAdded]);
 
-  console.log(isAdded);
+  // console.log(isAdded);
 
   return (
     <div className={styles.card}>
