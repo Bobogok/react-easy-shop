@@ -18,6 +18,14 @@ function App() {
       .catch(err => {
         console.log(err)
       });
+    
+    axios.get('https://613334927859e700176a3653.mockapi.io/cart')
+      .then(res => {
+        setCartItems(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      });
 
     const handleEsc = (event) => {
       if (event.keyCode === 27) {
@@ -33,20 +41,19 @@ function App() {
   }, []);
 
   const onAddToCart = (obj) => {
-    // axios.post('https://613334927859e700176a3653.mockapi.io/cart/', obj);
+    axios.post('https://613334927859e700176a3653.mockapi.io/cart/', obj);
     setCartItems(prev => [...prev, obj]);
   }
 
   const deleteFromCart = (id) => {
+    console.log("ID", id);
+    axios.delete(`https://613334927859e700176a3653.mockapi.io/cart/${id}`);
     setCartItems(prev => prev.filter(item => item.id !== id));
-    // axios.delete(`https://613334927859e700176a3653.mockapi.io/cart/${id}`);
   }
 
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
   }
-
-
 
   return (
     <div className="wrapper">
