@@ -82,14 +82,14 @@ const plugins = () => {
       }
     }),
     new CleanWebpackPlugin(),
-    // new CopyWebpackPlugin({
-    //   patterns: [
-    //     {
-    //       from: path.resolve(__dirname, 'src/favicon.ico'),
-    //       to: path.resolve(__dirname, 'dist')
-    //     }
-    //   ]
-    // }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'public/img'),
+          to: path.resolve(__dirname, 'build/img')
+        }
+      ]
+    }),
     new MiniCssExtractPlugin({
       filename: filename('css')
     })
@@ -106,7 +106,7 @@ module.exports = {
   },
   output: {
     filename: filename('js'),
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'build')
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.png'],
@@ -147,14 +147,6 @@ module.exports = {
       {
         test: /\.(ttf|woff|woff2|eot)$/,
         use: ['file-loader']
-      },
-      {
-        test: /\.xml$/,
-        use: ['xml-loader']
-      },
-      {
-        test: /\.csv$/,
-        use: ['csv-loader']
       },
       {
         test: /\.js$/,
