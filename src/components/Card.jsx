@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function Card({ id, imageURL, title, price, onPlus, deleteFromCart, onFavorite, deleteFromFavorites }) {
   const [isAdded, setIsAdded] = useState(false);
@@ -38,7 +38,7 @@ function Card({ id, imageURL, title, price, onPlus, deleteFromCart, onFavorite, 
           <span className="card__priceTitle">ЦЕНА:</span>
           <b className="card__price">{price} руб.</b>
         </div>
-        <button className="card__btnToCart" onClick={isAdded ? onDeleteFromCart : onAddToCart}>
+        <button type="button" className="card__btnToCart" onClick={isAdded ? onDeleteFromCart : onAddToCart}>
           <img src={isAdded ? './img/addComplete.svg' : './img/AddToCart.svg'} alt="" />
         </button>
       </div>

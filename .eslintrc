@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "es6": true,
@@ -11,14 +12,14 @@
       "jsx": true
     }
   },
-  "plugins": ["react"],
-  "prettier/prettier": [
-    "error",
-    {
-      "endOfLine": "auto"
-    }
-  ],
+  "plugins": ["react", "prettier"],
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "react/prop-types": [0],
     "react/destructuring-assignment": [0, "always"],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
