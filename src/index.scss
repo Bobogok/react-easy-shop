@@ -86,7 +86,7 @@ body {
     display: grid;
     grid-row-gap: 40px;
     grid-column-gap: 40px;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 .search {
@@ -234,7 +234,7 @@ body {
   &__btnToCart {
     position: absolute;
     right: 34px;
-    bottom: 34px;
+    bottom: 18px;
     width: 32px;
     height: 32px;
     color: transparent;

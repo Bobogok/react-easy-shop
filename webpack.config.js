@@ -10,7 +10,7 @@ const RemovePlugin = require('remove-files-webpack-plugin');
 const devMode = process.env.NODE_ENV === 'development';
 const prodMode = !devMode;
 
-console.log('isDevMode: ' + devMode);
+console.log(`isDevMode: ${devMode}`);
 
 const optimization = () => {
   const config = {
@@ -22,7 +22,6 @@ const optimization = () => {
   if (prodMode) {
     config.minimizer = [
       new TerserPlugin({
-        parallel: true,
         parallel: 4
       }) // This will enable CSS optimization only in production mode.
     ];
@@ -94,7 +93,8 @@ module.exports = {
   entry: './index.jsx',
   output: {
     filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'build')
+    path: path.resolve(__dirname, 'build'),
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
@@ -108,9 +108,10 @@ module.exports = {
     static: {
       directory: path.join(__dirname, 'src')
     },
+    historyApiFallback: true,
     compress: true,
     port: 1337,
-    open: true,
+    open: false,
     hot: devMode
   },
   devtool: devMode ? 'source-map' : 'eval',
@@ -118,7 +119,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -136,7 +137,7 @@ module.exports = {
         use: cssLoaders('sass-loader')
       },
       {
-        test: /\.(png|jpg|svg|gif)$/,
+        test: /\.(png|jpg|gif)$/,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]'
