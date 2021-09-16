@@ -7,7 +7,7 @@ function Card({
   title,
   price,
   onPlus,
-  deleteFromCart,
+  deleteToClick,
   onFavorite,
   deleteFromFavorite,
   favorited = false,
@@ -17,15 +17,15 @@ function Card({
   const [isAdded, setIsAdded] = useState(added);
   const [isFavorite, setIsFavorite] = useState(favorited);
 
-  const currObj = { id, imageURL, title, price };
+  const currObj = { id, parentId: id, imageURL, title, price };
 
   const onAddToCart = () => {
     onPlus(currObj);
     setIsAdded(true);
   };
 
-  const onDeleteFromCart = () => {
-    deleteFromCart(id);
+  const onDeleteToClick = () => {
+    deleteToClick(id);
     setIsAdded(false);
   };
 
@@ -69,7 +69,7 @@ function Card({
               <span className="card__priceTitle">ЦЕНА:</span>
               <b className="card__price">{price} руб.</b>
             </div>
-            <button type="button" className="card__btnToCart" onClick={isAdded ? onDeleteFromCart : onAddToCart}>
+            <button type="button" className="card__btnToCart" onClick={isAdded ? onDeleteToClick : onAddToCart}>
               <img src={isAdded ? './img/addComplete.svg' : './img/AddToCart.svg'} alt="" />
             </button>
           </div>

@@ -10,7 +10,6 @@ import Drawer from './components/Drawer';
 function App() {
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  // eslint-disable-next-line no-unused-vars
   const [favorites, setFavorites] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -46,22 +45,39 @@ function App() {
     };
   }, []);
 
-  const onAddToCart = (obj) => {
+  const onAddToCart = async (obj) => {
     try {
-      axios.post('https://613334927859e700176a3653.mockapi.io/cart/', obj);
-      setCartItems((prev) => {
-        console.log(prev);
-        return [...prev, obj];
-      });
-    } catch (e) {
-      alert(`Ошибка при добавлении в корзину ${e}`);
+      setCartItems((prev) => [...prev, obj]);
+      const { data } = await axios.post('https://613334927859e700176a3653.mockapi.io/cart/', obj);
+      setCartItems((prev) =>
+        prev.map((item) => {
+          if (item.parentId === data.parentId) {
+            return {
+              ...item,
+              id: data.id
+            };
+          }
+          return item;
+        })
+      );
+    } catch (error) {
+      alert('Кажется корзина сломалась...');
+      console.error(error);
     }
   };
 
   const deleteFromCart = (id) => {
-    console.log('ID', id);
     axios.delete(`https://613334927859e700176a3653.mockapi.io/cart/${id}`);
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
+  };
+
+  const deleteToClick = (parentId) => {
+    cartItems.forEach((item) => {
+      if (Number(item.parentId) === Number(parentId)) {
+        axios.delete(`https://613334927859e700176a3653.mockapi.io/cart/${item.id}`);
+      }
+    });
+    // setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
   };
 
   const onChangeSearchInput = (event) => {
@@ -109,7 +125,7 @@ function App() {
           onChangeSearchInput={onChangeSearchInput}
           onAddToFavorite={onAddToFavorite}
           onAddToCart={onAddToCart}
-          deleteFromCart={deleteFromCart}
+          deleteToClick={deleteToClick}
           deleteFromFavorite={deleteFromFavorite}
           isLoading={isLoading}
         />

@@ -9,7 +9,7 @@ function Home({
   onChangeSearchInput,
   onAddToFavorite,
   onAddToCart,
-  deleteFromCart,
+  deleteToClick,
   deleteFromFavorite,
   isLoading
 }) {
@@ -22,15 +22,16 @@ function Home({
         id={index}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...item}
+        cartItems={cartItems}
         onPlus={onAddToCart}
-        deleteFromCart={deleteFromCart}
+        deleteToClick={deleteToClick}
         onFavorite={onAddToFavorite}
         deleteFromFavorite={deleteFromFavorite}
         // eslint-disable-next-line react/jsx-boolean-value
         loading={isLoading}
         added={cartItems.some((obj) => {
           console.log(obj);
-          return Number(obj.id) === Number(item.id);
+          return Number(obj.parentId) === Number(item.id);
         })}
       />
     ));
@@ -59,7 +60,6 @@ function Home({
           />
         </div>
       </div>
-      {console.log(cartItems, items)}
       <div className="main__inner-elems">{renderItems()}</div>
     </div>
   );
