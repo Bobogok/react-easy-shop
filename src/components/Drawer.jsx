@@ -1,6 +1,39 @@
-import React from 'react';
+/* eslint-disable no-await-in-loop */
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useCart } from '../hooks/useCart';
+import Info from './Info';
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function Drawer({ onClose, deleteFromCart, items = [] }) {
+  const { cartItems, setCartItems, totalPrice } = useCart();
+  const [orderId, setOrderId] = useState(null);
+  const [isOrderCompleted, setIsOrderCompleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onClickOrder = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post('https://613334927859e700176a3653.mockapi.io/orders', { items: cartItems });
+      setOrderId(data.id);
+      setIsOrderCompleted(true);
+      setCartItems([]);
+
+      let i = 0;
+      while (i < cartItems.length) {
+        const item = cartItems[i];
+        await axios.delete(`https://613334927859e700176a3653.mockapi.io/cart/${item.id}`);
+        await delay(350);
+        // eslint-disable-next-line no-plusplus
+        i++;
+      }
+    } catch (e) {
+      console.error(`Что то пошло не так с заказом ${e}`);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="overlay">
       <div className="drawer">
@@ -10,14 +43,15 @@ function Drawer({ onClose, deleteFromCart, items = [] }) {
         </h2>
 
         {items.length === 0 ? (
-          <div className="emptyCart">
-            <img className="emptyCart__img" width={120} heigth={120} src="./img/EmptyBox.jpg" alt="Пустой коробок" />
-            <h3 className="emptyCart__title">Корзина пустая</h3>
-            <p className="emptyCart__text">Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-            <button type="button" className="greenButton greenButton--small" onClick={onClose}>
-              Вернуться назад
-            </button>
-          </div>
+          <Info
+            title={isOrderCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
+            description={
+              isOrderCompleted
+                ? `Ваш заказ ${orderId} скоро будет передан курьерской доставке`
+                : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+            }
+            image={isOrderCompleted ? './img/CompleteOrder.jpg' : './img/EmptyBox.jpg'}
+          />
         ) : (
           <>
             <div className="drawer__items">
@@ -42,15 +76,19 @@ function Drawer({ onClose, deleteFromCart, items = [] }) {
                 <li className="cart-total-block__elem">
                   <span className="cart-total-block__total">Итого:</span>
                   <div className="cart-total-block__dashed" />
-                  <b className="cart-total-block__price">21 498 руб.</b>
+                  <b className="cart-total-block__price">{totalPrice} руб.</b>
                 </li>
                 <li className="cart-total-block__elem">
                   <span className="cart-total-block__total">Налог 5%:</span>
                   <div className="cart-total-block__dashed" />
-                  <b className="cart-total-block__price">1074 руб.</b>
+                  <b className="cart-total-block__price">{Math.floor(totalPrice * 0.05)} руб.</b>
                 </li>
               </ul>
-              <button type="button" className="greenButton greenButton--big">
+              <button
+                type="button"
+                className="greenButton greenButton--big"
+                disabled={isLoading}
+                onClick={onClickOrder}>
                 Оформить заказ
               </button>
             </div>

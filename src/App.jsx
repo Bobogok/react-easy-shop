@@ -5,6 +5,7 @@ import { Route } from 'react-router-dom';
 import AppContext from './context';
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
+import Orders from './pages/Orders';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
 
@@ -147,6 +148,10 @@ function App() {
 
         <Route exact path="/favorites">
           <Favorites deleteFromFavorite={deleteFromFavorite} />
+        </Route>
+
+        <Route exact path="/orders">
+          <Orders />
         </Route>
       </div>
     </AppContext.Provider>
