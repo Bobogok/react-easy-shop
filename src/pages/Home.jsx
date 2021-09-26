@@ -1,38 +1,18 @@
 import React from 'react';
 import Card from '../components/Card';
 
-function Home({
-  items,
-  cartItems,
-  searchValue,
-  setSearchValue,
-  onChangeSearchInput,
-  onAddToFavorite,
-  onAddToCart,
-  deleteToClick,
-  deleteFromFavorite,
-  isLoading
-}) {
+function Home({ items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart, isLoading }) {
   const renderItems = () => {
     const filtredItems = items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()));
     return (isLoading ? [...Array(8)] : filtredItems).map((item, index) => (
       <Card
         // eslint-disable-next-line react/no-array-index-key
         key={index}
-        id={index}
+        onFavorite={(obj) => onAddToFavorite(obj)}
+        onPlus={(obj) => onAddToCart(obj)}
+        loading={isLoading}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...item}
-        cartItems={cartItems}
-        onPlus={onAddToCart}
-        deleteToClick={deleteToClick}
-        onFavorite={onAddToFavorite}
-        deleteFromFavorite={deleteFromFavorite}
-        // eslint-disable-next-line react/jsx-boolean-value
-        loading={isLoading}
-        added={cartItems.some((obj) => {
-          console.log(obj);
-          return Number(obj.parentId) === Number(item.id);
-        })}
       />
     ));
   };

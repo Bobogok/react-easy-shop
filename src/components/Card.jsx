@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ContentLoader from 'react-content-loader';
+import AppContext from '../context';
 
 function Card({
   id,
@@ -7,40 +8,32 @@ function Card({
   title,
   price,
   onPlus,
-  deleteToClick,
   onFavorite,
   deleteFromFavorite,
   favorited = false,
-  added = false,
   loading = false
 }) {
-  const [isAdded, setIsAdded] = useState(added);
+  const { isItemAdded, isItemFavorite } = React.useContext(AppContext);
   const [isFavorite, setIsFavorite] = useState(favorited);
 
-  const currObj = { id, parentId: id, imageURL, title, price };
+  const obj = { id, parentId: id, imageURL, title, price };
 
-  const onAddToCart = () => {
-    onPlus(currObj);
-    setIsAdded(true);
+  const onClickPlus = () => {
+    onPlus(obj);
   };
 
-  const onDeleteToClick = () => {
-    deleteToClick(id);
-    setIsAdded(false);
-  };
-
-  const onAddToFavorite = () => {
-    onFavorite(currObj);
-    setIsFavorite(true);
+  const onClickFavorite = () => {
+    onFavorite(obj);
+    setIsFavorite(!isFavorite);
   };
 
   const onDeleteFromFavorite = () => {
     deleteFromFavorite(id);
-    setIsFavorite(false);
   };
 
+  const locateFavorite = () => !!deleteFromFavorite;
+
   return (
-    // <div className="card">
     <>
       {loading ? (
         <ContentLoader
@@ -59,9 +52,21 @@ function Card({
         </ContentLoader>
       ) : (
         <div className="card">
-          <div className="card__favorite" onClick={isFavorite ? onDeleteFromFavorite : onAddToFavorite}>
-            <img src={isFavorite ? './img/favoriteSneakers.svg' : './img/unlike.svg'} alt="Like" />
-          </div>
+          {onFavorite && (
+            <div className="card__favorite" onClick={deleteFromFavorite ? onDeleteFromFavorite : onClickFavorite}>
+              <img
+                src={
+                  // eslint-disable-next-line no-nested-ternary
+                  locateFavorite()
+                    ? './img/favoriteSneakers.svg'
+                    : isItemFavorite(id)
+                    ? './img/favoriteSneakers.svg'
+                    : './img/unlike.svg'
+                }
+                alt="unlike"
+              />
+            </div>
+          )}
           <img className="card__img" width="100%" height={135} src={imageURL} alt="" />
           <h5 className="card__title">{title}</h5>
           <div className="card__bottomSide">
@@ -69,14 +74,13 @@ function Card({
               <span className="card__priceTitle">ЦЕНА:</span>
               <b className="card__price">{price} руб.</b>
             </div>
-            <button type="button" className="card__btnToCart" onClick={isAdded ? onDeleteToClick : onAddToCart}>
-              <img src={isAdded ? './img/addComplete.svg' : './img/AddToCart.svg'} alt="" />
+            <button type="button" className="card__btnToCart" onClick={onClickPlus}>
+              {onPlus && <img src={isItemAdded(id) ? './img/addComplete.svg' : './img/AddToCart.svg'} alt="" />}
             </button>
           </div>
         </div>
       )}
     </>
-    // </div>
   );
 }
 
