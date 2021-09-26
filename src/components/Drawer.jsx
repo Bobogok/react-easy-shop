@@ -6,7 +6,7 @@ import Info from './Info';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function Drawer({ onClose, deleteFromCart, items = [] }) {
+function Drawer({ onClose, deleteFromCart, items = [], opened }) {
   const { cartItems, setCartItems, totalPrice } = useCart();
   const [orderId, setOrderId] = useState(null);
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
@@ -35,7 +35,7 @@ function Drawer({ onClose, deleteFromCart, items = [] }) {
   };
 
   return (
-    <div className="overlay">
+    <div className={`overlay ${opened ? 'overlay_visible' : ''}`}>
       <div className="drawer">
         <h2 className="drawer__title">
           Корзина

@@ -18,21 +18,26 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
-      const cartResponse = await axios.get('https://613334927859e700176a3653.mockapi.io/cart');
-      const favoritesResponse = await axios.get('https://613334927859e700176a3653.mockapi.io/favorites');
-      const itemResponse = await axios.get('https://613334927859e700176a3653.mockapi.io/items');
+    try {
+      (async function fetchData() {
+        const [cartResponse, favoritesResponse, itemResponse] = await Promise.all([
+          axios.get('https://613334927859e700176a3653.mockapi.io/cart'),
+          axios.get('https://613334927859e700176a3653.mockapi.io/favorites'),
+          axios.get('https://613334927859e700176a3653.mockapi.io/items')
+        ]);
 
-      setIsLoading(false);
-      setCartItems(cartResponse.data);
-      setFavorites(favoritesResponse.data);
-      setItems(itemResponse.data);
+        setIsLoading(false);
+        setCartItems(cartResponse.data);
+        setFavorites(favoritesResponse.data);
+        setItems(itemResponse.data);
+      })();
+    } catch (e) {
+      console.error(`Ошибка при запросе данных ${e}`);
     }
-
-    fetchData();
 
     const handleEsc = (event) => {
       if (event.keyCode === 27) {
+        setCartOpened(false);
         setSearchValue('');
       }
     };
@@ -67,17 +72,15 @@ function App() {
       }
     } catch (error) {
       alert('Ошибка при добавлении в корзину');
-      console.error(error);
     }
   };
 
   const deleteFromCart = (id) => {
     try {
-      axios.delete(`https://613334927859e700176a3653.mockapi.io/cart/${id}`);
       setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
+      axios.delete(`https://613334927859e700176a3653.mockapi.io/cart/${id}`);
     } catch (error) {
       alert('Ошибка при удалении из корзины');
-      console.error(error);
     }
   };
 
@@ -89,20 +92,36 @@ function App() {
     try {
       const findItem = favorites.find((item) => Number(item.parentId) === Number(obj.id));
       if (findItem) {
-        await axios.delete(`https://613334927859e700176a3653.mockapi.io/favorites/${findItem.id}`);
         setFavorites((prev) => prev.filter((item) => Number(item.parentId) !== Number(obj.id)));
+        await axios.delete(`https://613334927859e700176a3653.mockapi.io/favorites/${findItem.id}`);
       } else {
+        setFavorites((prev) => [...prev, obj]);
         const { data } = await axios.post('https://613334927859e700176a3653.mockapi.io/favorites', obj);
-        setFavorites((prev) => [...prev, data]);
+        setFavorites((prev) =>
+          prev.map((item) => {
+            if (item.parentId === data.parentId) {
+              return {
+                ...item,
+                id: data.id
+              };
+            }
+            return item;
+          })
+        );
+        console.log(favorites);
       }
     } catch (e) {
-      console.error(`Не удалось добавить в фавориты ${e}`);
+      alert(`Не удалось добавить или удалить фавориты`);
     }
   };
 
   const deleteFromFavorite = (id) => {
-    axios.delete(`https://613334927859e700176a3653.mockapi.io/favorites/${id}`);
-    setFavorites((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
+    try {
+      axios.delete(`https://613334927859e700176a3653.mockapi.io/favorites/${id}`);
+      setFavorites((prev) => prev.filter((item) => Number(item.id) !== Number(id)));
+    } catch (e) {
+      alert('Ошибка при удалении из фаворитов');
+    }
   };
 
   const isItemAdded = (id) => {
@@ -127,9 +146,12 @@ function App() {
         setCartItems
       }}>
       <div className="wrapper">
-        {cartOpened && (
-          <Drawer items={cartItems} onClose={() => setCartOpened(false)} deleteFromCart={deleteFromCart} />
-        )}
+        <Drawer
+          items={cartItems}
+          onClose={() => setCartOpened(false)}
+          deleteFromCart={deleteFromCart}
+          opened={cartOpened}
+        />
 
         <Header onClickCart={() => setCartOpened(true)} />
 
