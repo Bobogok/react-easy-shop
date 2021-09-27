@@ -19,28 +19,32 @@ function Home({ items, searchValue, setSearchValue, onChangeSearchInput, onAddTo
 
   return (
     <div className="main">
-      <div className="main__inner-src-title">
-        <h1 className="main__title">{searchValue ? `Поиск по запросу: ${searchValue}` : 'Все кроссовки'}</h1>
-        <div className="search">
-          <img className="search__img" width={14} height={14} src="./img/Search.svg" alt="Search" />
-          {searchValue && (
-            <img
-              className="btn-cancel search__cancel"
-              onClick={() => setSearchValue('')}
-              src="./img/cancel-cart.svg"
-              alt="Clear"
-            />
-          )}
-          <input
-            className="search__input"
-            onChange={onChangeSearchInput}
-            value={searchValue}
-            type="text"
-            placeholder="Поиск..."
-          />
+      <div className="cards">
+        <div className="cards__inner">
+          <div className="cards__inner-src-title">
+            <h1 className="cards__title">{searchValue ? `Поиск по запросу: ${searchValue}` : 'Все кроссовки'}</h1>
+            <div className="search">
+              <img className="search__img" width={14} height={14} src="./img/Search.svg" alt="Search" />
+              {searchValue && (
+                <img
+                  className="btn-cancel search__cancel"
+                  onClick={() => setSearchValue('')}
+                  src="./img/cancel-cart.svg"
+                  alt="Clear"
+                />
+              )}
+              <input
+                className="search__input"
+                onChange={onChangeSearchInput}
+                value={searchValue}
+                type="text"
+                placeholder="Поиск..."
+              />
+            </div>
+          </div>
+          <div className="cards__inner-elems">{renderItems()}</div>
         </div>
       </div>
-      <div className="main__inner-elems">{renderItems()}</div>
     </div>
   );
 }

@@ -97,7 +97,7 @@ const plugins = () => {
   ];
 
   if (prodMode) {
-    // base.push(new BundleAnalyzerPlugin());
+    // for production
   }
 
   return base;

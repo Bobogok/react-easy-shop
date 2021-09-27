@@ -169,7 +169,7 @@ function App() {
         </Route>
 
         <Route exact path="/favorites">
-          <Favorites deleteFromFavorite={deleteFromFavorite} />
+          <Favorites deleteFromFavorite={deleteFromFavorite} isLoading={isLoading} />
         </Route>
 
         <Route exact path="/orders">

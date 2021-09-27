@@ -1,0 +1,17 @@
+html,
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $main;
+}
+
+.wrapper {
+  position: relative;
+  bottom: 50px; // sick, but its worked
+  width: 1080px;
+  margin: 100px auto;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+}

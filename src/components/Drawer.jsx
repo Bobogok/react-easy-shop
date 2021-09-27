@@ -41,59 +41,60 @@ function Drawer({ onClose, deleteFromCart, items = [], opened }) {
           Корзина
           <img className="btn-cancel" onClick={onClose} src="./img/cancel-cart.svg" alt="Cancel" />
         </h2>
-
-        {items.length === 0 ? (
-          <Info
-            title={isOrderCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
-            description={
-              isOrderCompleted
-                ? `Ваш заказ ${orderId} скоро будет передан курьерской доставке`
-                : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
-            }
-            image={isOrderCompleted ? './img/CompleteOrder.jpg' : './img/EmptyBox.jpg'}
-          />
-        ) : (
-          <>
-            <div className="drawer__items">
-              {items.map((obj) => (
-                <div key={obj.id} className="cart-item">
-                  <div className="cart-item__img" style={{ backgroundImage: `url(${obj.imageURL})` }} />
-                  <div className="cart-item__info">
-                    <p className="cart-item__title">{obj.title}</p>
-                    <b className="cart-item__price">{obj.price} руб.</b>
+        <div className="drawer__main">
+          {items.length === 0 ? (
+            <Info
+              title={isOrderCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
+              description={
+                isOrderCompleted
+                  ? `Ваш заказ ${orderId} скоро будет передан курьерской доставке`
+                  : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+              }
+              image={isOrderCompleted ? './img/CompleteOrder.jpg' : './img/EmptyBox.jpg'}
+            />
+          ) : (
+            <>
+              <div className="drawer__items">
+                {items.map((obj) => (
+                  <div key={obj.id} className="cart-item">
+                    <div className="cart-item__img" style={{ backgroundImage: `url(${obj.imageURL})` }} />
+                    <div className="cart-item__info">
+                      <p className="cart-item__title">{obj.title}</p>
+                      <b className="cart-item__price">{obj.price} руб.</b>
+                    </div>
+                    <img
+                      onClick={() => deleteFromCart(obj.id)}
+                      className="btn-cancel"
+                      src="./img/cancel-cart.svg"
+                      alt="Cancel"
+                    />
                   </div>
-                  <img
-                    onClick={() => deleteFromCart(obj.id)}
-                    className="btn-cancel"
-                    src="./img/cancel-cart.svg"
-                    alt="Cancel"
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="cart-total-block">
-              <ul>
-                <li className="cart-total-block__elem">
-                  <span className="cart-total-block__total">Итого:</span>
-                  <div className="cart-total-block__dashed" />
-                  <b className="cart-total-block__price">{totalPrice} руб.</b>
-                </li>
-                <li className="cart-total-block__elem">
-                  <span className="cart-total-block__total">Налог 5%:</span>
-                  <div className="cart-total-block__dashed" />
-                  <b className="cart-total-block__price">{Math.floor(totalPrice * 0.05)} руб.</b>
-                </li>
-              </ul>
-              <button
-                type="button"
-                className="greenButton greenButton--big"
-                disabled={isLoading}
-                onClick={onClickOrder}>
-                Оформить заказ
-              </button>
-            </div>
-          </>
-        )}
+                ))}
+              </div>
+              <div className="cart-total-block">
+                <ul>
+                  <li className="cart-total-block__elem">
+                    <span className="cart-total-block__total">Итого:</span>
+                    <div className="cart-total-block__dashed" />
+                    <b className="cart-total-block__price">{totalPrice} руб.</b>
+                  </li>
+                  <li className="cart-total-block__elem">
+                    <span className="cart-total-block__total">Налог 5%:</span>
+                    <div className="cart-total-block__dashed" />
+                    <b className="cart-total-block__price">{Math.floor(totalPrice * 0.05)} руб.</b>
+                  </li>
+                </ul>
+                <button
+                  type="button"
+                  className="greenButton greenButton--big"
+                  disabled={isLoading}
+                  onClick={onClickOrder}>
+                  Оформить заказ
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
