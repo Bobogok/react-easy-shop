@@ -1,4 +1,23 @@
 {
-  "presets": ["@babel/preset-react"],
-  "plugins": ["inline-react-svg"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": "last 2 versions"
+        },
+        "corejs": 3,
+        "modules": false,
+        "loose": false,
+        "useBuiltIns": "usage"
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": ["transform-class-properties", "inline-react-svg"],
+  "env": {
+    "test": {
+      "plugins": ["transform-es2015-modules-commonjs"]
+    }
+  }
 }

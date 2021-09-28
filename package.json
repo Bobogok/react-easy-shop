@@ -5,11 +5,10 @@
   "description": "",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --mode development",
-    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "prod": "cross-env NODE_ENV=production webpack --mode production",
     "watch": "cross-env NODE_ENV=development webpack --mode production --watch",
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open",
-    "start:no-window": "cross-env NODE_ENV=development webpack-dev-server --mode development",
-    "serve": "cross-env NODE_ENV=development webpack serve"
+    "start:no-window": "cross-env NODE_ENV=development webpack-dev-server --mode development"
   },
   "keywords": [],
   "author": "",
@@ -51,6 +50,8 @@
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-named-asset-import": "^0.3.7",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-react-app": "^10.0.0",
     "before-build-webpack": "^0.2.11",
     "clean-webpack-plugin": "^4.0.0",

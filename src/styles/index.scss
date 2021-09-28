@@ -251,6 +251,7 @@
     flex-direction: column;
   }
   &__priceTitle {
+    margin-bottom: 2px;
     color: #bdbdbd;
     font-weight: 500;
     font-size: 11px;
@@ -260,11 +261,6 @@
     font-size: 14px;
   }
   &__btnToCart {
-    position: absolute;
-    right: 34px;
-    bottom: 18px;
-    width: 32px;
-    height: 32px;
     color: transparent;
     text-decoration: none;
     background-color: transparent;

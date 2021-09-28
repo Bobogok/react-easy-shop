@@ -75,7 +75,14 @@ function Card({
               <b className="card__price">{price} руб.</b>
             </div>
             <button type="button" className="card__btnToCart" onClick={onClickPlus}>
-              {onPlus && <img src={isItemAdded(id) ? './img/addComplete.svg' : './img/AddToCart.svg'} alt="" />}
+              {onPlus && (
+                <img
+                  width={32}
+                  height={32}
+                  src={isItemAdded(id) ? './img/addComplete.svg' : './img/AddToCart.svg'}
+                  alt="button cart"
+                />
+              )}
             </button>
           </div>
         </div>

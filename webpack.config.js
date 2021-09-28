@@ -21,6 +21,7 @@ const optimization = () => {
   };
 
   if (prodMode) {
+    config.minimize = true;
     config.minimizer = [
       new TerserPlugin({
         parallel: 4
@@ -105,7 +106,6 @@ const plugins = () => {
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
-  mode: 'development',
   entry: './index.jsx',
   output: {
     filename: '[name].[contenthash].js',
@@ -138,10 +138,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
-          }
+          loader: 'babel-loader'
         }
       },
       {
@@ -153,11 +150,9 @@ module.exports = {
         use: cssLoaders('sass-loader')
       },
       {
-        test: /\.(png|jpg|gif)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]'
-        }
+        test: /\.(png|jpe?g|gif)$/,
+        exclude: /node_modules/,
+        use: ['url-loader', 'file-loader']
       }
     ]
   }
